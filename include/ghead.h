@@ -51,13 +51,13 @@ struct ghead
     unsigned int body_len;
     unsigned char body[];
 
-    static RETURN_CODE gread(int sock, ghead * head, size_t buflen, int timeout);
-    static RETURN_CODE gwrite(int sock, ghead * head, size_t buflen, int timeout);
+    static RETURN_CODE gread(int sock, ghead* head, size_t buflen, int timeout);
+    static RETURN_CODE gwrite(int sock, ghead* head, size_t buflen, int timeout);
 private:
     static const unsigned int GHEAD_MAGICNUM;
-    static ssize_t sync_read_n_tmo(socket_t fd, uint8_t * ptr1, size_t nbytes, int msecs);
-    static ssize_t sync_write_n_tmo(int fd, uint8_t * ptr, size_t nbytes, int timeout_ms);
-    static int poll_wrap(pollfd * fdarray, nfds_t nfds, int timeout);
+    static ssize_t sync_read_n_tmo(socket_t fd, uint8_t* ptr1, size_t nbytes, int msecs);
+    static ssize_t sync_write_n_tmo(int fd, uint8_t* ptr, size_t nbytes, int timeout_ms);
+    static int poll_wrap(pollfd* fdarray, nfds_t nfds, int timeout);
     static bool set_sock_noblock(int fd);
 };
 }
