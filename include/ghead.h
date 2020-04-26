@@ -40,16 +40,14 @@ typedef int socket_t;
 struct ghead 
 {
     // No virtual, No 'this' pointer, all static except
-    unsigned short id;
-    unsigned short version;
-    unsigned int log_id;
-    char provider[16];
-    unsigned int magic_num;
-    unsigned int reserved1;
-    unsigned int reserved2;
-    unsigned int reserved3;
-    unsigned int body_len;
-    unsigned char body[];
+    uint64_t id;
+    uint32_t magic_num;
+    uint32_t log_id;
+    uint8_t provider[16];
+    uint32_t reserved1;
+    uint32_t reserved2;
+    size_t body_len;
+    uint8_t body[];
 
     static RETURN_CODE gread(int sock, ghead* head, size_t buflen, int timeout);
     static RETURN_CODE gwrite(int sock, ghead* head, size_t buflen, int timeout);

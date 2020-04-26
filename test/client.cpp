@@ -32,9 +32,9 @@ void read(uint8_t * buf)
         return;
     }
     ghead * phead = reinterpret_cast<ghead*>(buf);
-    afile>>phead->id>>phead->version>>phead->log_id;
-    afile>>phead->provider>>phead->magic_num;
-    afile>>phead->reserved1>>phead->reserved2>>phead->reserved3;
+    afile>>phead->id>>phead->magic_num>>phead->log_id;
+    afile>>phead->provider;
+    afile>>phead->reserved1>>phead->reserved2;
     afile>>phead->body_len;
     afile>>*(buf+ sizeof(ghead));
     *(buf + sizeof(ghead) + phead->body_len) = '\0';

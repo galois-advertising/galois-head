@@ -23,8 +23,7 @@
 #include <thread>
 using namespace galois::ghead;
 
-void read(uint8_t * buf)
-{
+void read(uint8_t * buf) {
     std::fstream  afile;
     afile.open("./server_ghead.txt", std::ios::in);
     if (afile.is_open() == false) {
@@ -32,19 +31,18 @@ void read(uint8_t * buf)
         return;
     }
     ghead * phead = reinterpret_cast<ghead*>(buf);
-    afile>>phead->id>>phead->version>>phead->log_id;
-    afile>>phead->provider>>phead->magic_num;
-    afile>>phead->reserved1>>phead->reserved2>>phead->reserved3;
+    afile>>phead->id>>phead->magic_num>>phead->log_id;
+    afile>>phead->provider;
+    afile>>phead->reserved1>>phead->reserved2;
     afile>>phead->body_len;
     afile>>*(buf + sizeof(ghead));
     *(buf + sizeof(ghead) + phead->body_len) = '\0';
 
 }
 
-void query_thread(int fd)
-{
+void query_thread(int fd) {
     std::cout<<"new thread -----------------"<<std::endl;
-    char buf[54];
+    char buf[58];
     ghead * head = reinterpret_cast<ghead*>(buf);
     if (RET_SUCCESS == ghead::gread(fd, head, sizeof(buf), 10000))
     {
@@ -61,7 +59,6 @@ void query_thread(int fd)
         p->body[request_body_len + 2 - 1] = ']';
         strncpy(reinterpret_cast<char *>(&p->body[1]), 
             reinterpret_cast<const char *>(head->body), request_body_len);
-        const char * body = reinterpret_cast<const char *>(&head->body); 
         ghead::gwrite(fd, p, response_len, 10000);
         std::cout<<p->body<<std::endl;
         delete [] response;
@@ -71,14 +68,12 @@ void query_thread(int fd)
 }
 
 int listenfd;
-void on_sigterm(int arg)
-{
+void on_sigterm(int arg) {
     (void) arg;
     close(listenfd);
 }
 
-int main(int argc, char * argv[])
-{
+int main(int argc, char * argv[]) {
     signal(SIGPIPE, SIG_IGN); 
     signal(SIGTERM, on_sigterm);
     int connfd;
